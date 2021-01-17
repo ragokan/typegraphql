@@ -6,7 +6,7 @@ module.exports = [
     port: "5432",
     username: "postgres",
     password: "hammer90",
-    database: "typegraphql",
+    database: "ormlord",
     synchronize: true,
     logging: true,
     entities: ["src/entity/**/*.ts"],

@@ -3,7 +3,7 @@ import { createConnection, getConnectionOptions } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { MovieResolver } from "./resolvers/MovieResolver";
+import { RegisterResolver } from "./modules/user/Register";
 
 (async () => {
   const app = express();
@@ -13,7 +13,7 @@ import { MovieResolver } from "./resolvers/MovieResolver";
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [MovieResolver],
+      resolvers: [RegisterResolver],
       validate: true,
     }),
     context: ({ req, res }) => ({ req, res }),

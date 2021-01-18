@@ -5,6 +5,7 @@ import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { RegisterResolver } from "./modules/user/Register";
+import { LoginResolver } from "./modules/user/Login";
 import * as ground from "graphql-playground-middleware-express";
 import session from "express-session";
 import connectRedis from "connect-redis";
@@ -37,7 +38,7 @@ import { redis } from "./redis";
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [RegisterResolver],
+      resolvers: [RegisterResolver, LoginResolver],
       validate: true,
     }),
     context: ({ req, res }) => ({ req, res }),

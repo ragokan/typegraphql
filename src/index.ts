@@ -42,8 +42,8 @@ import cors from "cors";
       store: new RedisStore({
         client: redis as any,
       }),
-      name: "qid",
-      secret: "aslkdfjoiq12312",
+      name: process.env.sessionName,
+      secret: process.env.sessionSecret as string,
       resave: false,
       saveUninitialized: false,
       cookie: {

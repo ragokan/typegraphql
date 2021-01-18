@@ -1,6 +1,11 @@
 import nodemailer from "nodemailer";
 
-export async function SendEmail(targetMail: string, mailUrl: string) {
+export async function SendEmail(
+  targetMail: string,
+  mailUrl: string,
+  subject: string = "Email Validation ✔",
+  message: string = "Please click here to validate your email."
+) {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -10,12 +15,12 @@ export async function SendEmail(targetMail: string, mailUrl: string) {
       },
     });
 
-    const info = await transporter.sendMail({
-      from: `"Typegraphql 👻" <${process.env.mailerEmail}>`,
+    await transporter.sendMail({
+      from: `"${process.env.mailerTitle} 👻" <${process.env.mailerEmail}>`,
       to: targetMail,
-      subject: "Email Validation ✔",
-      text: "Something",
-      html: `<a href="${mailUrl}">Please click here to validate your email.</a>`,
+      subject,
+      text: `${process.env.mailerTitle} 👻`,
+      html: `<a href="${mailUrl}">${message}</a>`,
     });
   } catch (error) {
     throw new Error(error);

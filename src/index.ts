@@ -2,10 +2,6 @@ import "reflect-metadata";
 import { createConnection, getConnectionOptions } from "typeorm";
 import * as ground from "graphql-playground-middleware-express";
 import { authChecker } from "./modules/middleware/AuthChecker";
-import { ConfirmResolver } from "./modules/user/ConfirmEmail";
-import { RegisterResolver } from "./modules/user/Register";
-import { GetUserResolver } from "./modules/user/GetUser";
-import { LoginResolver } from "./modules/user/Login";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import connectRedis from "connect-redis";
@@ -23,12 +19,8 @@ import cors from "cors";
 
   // APOLLO AND SCHEMA
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, GetUserResolver, ConfirmResolver],
+    resolvers: [__dirname + "/modules/**/*.ts"],
     authChecker,
-
-    // authChecker: ({ context: { req } }) => {
-    //   return !!req.session.userId;
-    // },
   });
   const apolloServer = new ApolloServer({
     schema,
@@ -49,7 +41,7 @@ import cors from "cors";
   app.use(
     session({
       store: new RedisStore({
-        client: redis as any,
+        client: redis,
       }),
       name: "sessionSecret",
       secret: process.env.sessionSecret as string,

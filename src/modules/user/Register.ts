@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
 import { RegisterInput } from "../../validation/RegisterValidation";
 import { SendEmail } from "../utils/SendEmail";
-import { CreateConfirmationUrl } from "../utils/CreateConfirmationUrl";
+import { CreateConfirmationUrl } from "../utils/CreateMailUrl";
 
 @Resolver()
 export class RegisterResolver {

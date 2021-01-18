@@ -28,18 +28,16 @@ mutation Register($data:RegisterInput!) {
 
 describe("Register", () => {
   it("create user", async () => {
-    console.log(
-      await callGraphql({
-        source: registerMutation,
-        variableValues: {
-          data: {
-            firstName: "Okan",
-            lastName: "Yeah",
-            email: "okanyeah@yeah.com",
-            password: "yeah",
-          },
+    await callGraphql({
+      source: registerMutation,
+      variableValues: {
+        data: {
+          firstName: "Okan",
+          lastName: "Yeah",
+          email: "letstestthis@gmail.com",
+          password: "realhammer99",
         },
-      })
-    );
+      },
+    });
   });
 });

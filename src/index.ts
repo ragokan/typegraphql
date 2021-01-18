@@ -1,6 +1,8 @@
 import "reflect-metadata";
-import * as ground from "graphql-playground-middleware-express";
 import { createConnection, getConnectionOptions } from "typeorm";
+import * as ground from "graphql-playground-middleware-express";
+import { authChecker } from "./modules/middleware/AuthChecker";
+import { ConfirmResolver } from "./modules/user/ConfirmEmail";
 import { RegisterResolver } from "./modules/user/Register";
 import { GetUserResolver } from "./modules/user/GetUser";
 import { LoginResolver } from "./modules/user/Login";
@@ -12,8 +14,6 @@ import { redis } from "./redis";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { authChecker } from "./modules/middleware/AuthChecker";
-import { SendEmail } from "./modules/utils/SendEmail";
 
 (async () => {
   dotenv.config();
@@ -23,7 +23,7 @@ import { SendEmail } from "./modules/utils/SendEmail";
 
   // APOLLO AND SCHEMA
   const schema = await buildSchema({
-    resolvers: [RegisterResolver, LoginResolver, GetUserResolver],
+    resolvers: [RegisterResolver, LoginResolver, GetUserResolver, ConfirmResolver],
     authChecker,
 
     // authChecker: ({ context: { req } }) => {

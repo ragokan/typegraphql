@@ -4,5 +4,5 @@ import { redis } from "../../redis";
 export const CreateConfirmationUrl = async (userId: number | string): Promise<string> => {
   const token = v4();
   await redis.set(token, userId, "ex", 60 * 60 * 24);
-  return `http://localhost:3000/user/confirm/${token}`;
+  return `${process.env.confirmationUrl}/${token}`;
 };

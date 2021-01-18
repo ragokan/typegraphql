@@ -4,11 +4,14 @@ import { ExpressContext } from "../../types/ExpressContextType";
 @Resolver()
 export class LogoutResolver {
   @Mutation(() => Boolean)
-  async logoutUser(@Ctx() { req }: ExpressContext): Promise<Boolean> {
-    return new Promise((res, rej) =>
+  async logoutUser(@Ctx() { req, res }: ExpressContext): Promise<Boolean> {
+    return new Promise((resolve, reject) =>
       req.session.destroy((err) => {
-        if (err) rej(false);
-        res(true);
+        if (err) return reject(false);
+
+        res.clearCookie("sessionSecret");
+
+        return resolve(true);
       })
     );
   }

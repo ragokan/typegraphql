@@ -6,6 +6,7 @@ import { PasswordInput } from "../../validation/PasswordValidation";
 import { forgotPasswordPrefix } from "../constants/RedisPrefixes";
 import { redis } from "../../redis";
 import bcrypt from "bcryptjs";
+import { ExpressContext } from "../../types/ExpressContextType";
 
 @Resolver()
 export class ForgotPasswordResolver {
@@ -22,20 +23,28 @@ export class ForgotPasswordResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => User, { nullable: true })
   async changePassword(
-    @Arg("data") { password, token }: PasswordInput
-  ): Promise<boolean> {
+    @Arg("data") { password, token }: PasswordInput,
+    @Ctx() { req }: ExpressContext
+  ): Promise<User | null> {
     try {
       const userId = await redis.get(forgotPasswordPrefix + token);
-      if (!userId) return false;
-      const hashedPassword = await bcrypt.hash(password, 12);
+      if (!userId) return null;
 
-      await User.update({ id: parseInt(userId) }, { password: hashedPassword });
+      const user = await User.findOne(userId);
+      if (!user) return null;
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+      user.password = hashedPassword;
+
+      await user.save();
+
       redis.del(forgotPasswordPrefix + token);
-      return true;
+      req.session.userId = userId;
+      return user;
     } catch {
-      return false;
+      return null;
     }
   }
 }

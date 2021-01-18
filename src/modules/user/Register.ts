@@ -9,7 +9,7 @@ import { CreateConfirmationUrl } from "../utils/CreateMailUrl";
 export class RegisterResolver {
   @Mutation(() => User)
   async registerUser(
-    @Arg("user") { email, firstName, lastName, password }: RegisterInput
+    @Arg("data") { email, firstName, lastName, password }: RegisterInput
   ): Promise<User> {
     try {
       const hashedPassword = await bcrypt.hash(password, 12);

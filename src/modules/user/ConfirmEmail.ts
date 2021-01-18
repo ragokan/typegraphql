@@ -15,7 +15,7 @@ export class ConfirmResolver {
     if (!userId) return false;
 
     await User.update({ id: parseInt(userId) }, { confirmed: true });
-    redis.del(token);
+    redis.del(confirmMailPrefix + token);
     return true;
   }
 }

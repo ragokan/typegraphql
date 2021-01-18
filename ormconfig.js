@@ -3,7 +3,7 @@ module.exports = [
     name: "development",
     type: "postgres",
     host: "localhost",
-    port: "5432",
+    port: 5432,
     username: "postgres",
     password: "hammer90",
     database: "ormlord",

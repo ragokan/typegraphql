@@ -12,6 +12,7 @@ import session from "express-session";
 import { redis } from "./redis";
 import express from "express";
 import cors from "cors";
+import { AuthRequired } from "./modules/middleware/AuthRequired";
 
 (async () => {
   // DATABASE

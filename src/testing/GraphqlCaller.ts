@@ -1,4 +1,4 @@
-import { graphql } from "graphql";
+import { graphql, GraphQLSchema } from "graphql";
 import { Maybe } from "graphql/jsutils/Maybe";
 import { createSchema } from "../modules/utils/CreateSchema";
 
@@ -7,9 +7,13 @@ interface Options {
   variableValues?: Maybe<{ [key: string]: any }>;
 }
 
-export const callGraphql = async ({ source, variableValues }: Options) =>
-  graphql({
-    schema: await createSchema(),
+let schema: GraphQLSchema;
+
+export const callGraphql = async ({ source, variableValues }: Options) => {
+  if (!schema) schema = await createSchema();
+  return graphql({
+    schema,
     source,
     variableValues,
   });
+};

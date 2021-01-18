@@ -6,6 +6,7 @@ export const AuthRequired: MiddlewareFn<ExpressContext> = async (
   next
 ) => {
   if (!req.session.userId) console.log("User Doesn't Exists!");
+  // throw error here, error message will be sent to the user
   else console.log("User ID: ", req.session.userId);
 
   return next();

@@ -6,13 +6,12 @@ import { RegisterResolver } from "./modules/user/Register";
 import { GetUserResolver } from "./modules/user/GetUser";
 import { LoginResolver } from "./modules/user/Login";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
+import { buildSchema, AuthChecker } from "type-graphql";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { redis } from "./redis";
 import express from "express";
 import cors from "cors";
-import { AuthRequired } from "./modules/middleware/AuthRequired";
 
 (async () => {
   // DATABASE

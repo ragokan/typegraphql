@@ -8,8 +8,8 @@ export const testConnection = (drop: boolean = false) =>
     port: 5432,
     username: "postgres",
     password: "hammer90",
-    database: "ormlord",
+    database: "ormlord-testing",
     synchronize: drop,
     dropSchema: drop,
-    entities: ["src/entity/**/*.ts"],
+    entities: [__dirname + "../entity/**/*.ts"],
   });

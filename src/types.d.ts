@@ -8,6 +8,7 @@ declare global {
       confirmationUrl: string;
       mailerTitle: string;
       mailResetUrl: string;
+      DATABASE_URL: string;
     }
   }
 }

@@ -1,15 +1,14 @@
 import "reflect-metadata";
 import { createConnection, getConnectionOptions } from "typeorm";
 import * as ground from "graphql-playground-middleware-express";
-import { authChecker } from "./modules/middleware/AuthChecker";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { redis } from "./redis";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { createSchema } from "./modules/utils/CreateSchema";
 
 (async () => {
   dotenv.config();
@@ -18,10 +17,7 @@ import cors from "cors";
   await createConnection({ ...options, name: "default", logging: false });
 
   // APOLLO AND SCHEMA
-  const schema = await buildSchema({
-    resolvers: [__dirname + "/modules/**/*.ts"],
-    authChecker,
-  });
+  const schema = await createSchema();
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }: any) => ({ req, res }),

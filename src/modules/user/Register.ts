@@ -2,6 +2,8 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
 import { RegisterInput } from "../../validation/RegisterValidation";
+import { SendEmail } from "../utils/SendEmail";
+import { CreateConfirmationUrl } from "../utils/CreateConfirmationUrl";
 
 @Resolver()
 export class RegisterResolver {
@@ -9,15 +11,22 @@ export class RegisterResolver {
   async registerUser(
     @Arg("user") { email, firstName, lastName, password }: RegisterInput
   ): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 12);
+    try {
+      const hashedPassword = await bcrypt.hash(password, 12);
 
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-    }).save();
+      const user = await User.create({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+      }).save();
 
-    return user;
+      await SendEmail(email, await CreateConfirmationUrl(user.id));
+
+      return user;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
 }

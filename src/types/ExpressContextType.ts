@@ -1,3 +1,5 @@
+import { Request, Response } from "express";
+
 export interface ExpressContext {
   req: Request & {
     session: {

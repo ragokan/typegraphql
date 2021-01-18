@@ -1,25 +1,46 @@
 import "reflect-metadata";
+import * as ground from "graphql-playground-middleware-express";
 import { createConnection, getConnectionOptions } from "typeorm";
-import express from "express";
-import cors from "cors";
+import { RegisterResolver } from "./modules/user/Register";
+import { GetUserResolver } from "./modules/user/GetUser";
+import { LoginResolver } from "./modules/user/Login";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { RegisterResolver } from "./modules/user/Register";
-import { LoginResolver } from "./modules/user/Login";
-import * as ground from "graphql-playground-middleware-express";
-import session from "express-session";
 import connectRedis from "connect-redis";
+import session from "express-session";
 import { redis } from "./redis";
+import express from "express";
+import cors from "cors";
 
 (async () => {
-  const RedisStore = connectRedis(session);
+  // DATABASE
+  const options = await getConnectionOptions(process.env.NODE_ENV || "development");
+  await createConnection({ ...options, name: "default", logging: false });
+
+  // APOLLO AND SCHEMA
+  const schema = await buildSchema({
+    resolvers: [RegisterResolver, LoginResolver, GetUserResolver],
+  });
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req }: any) => ({ req }),
+  });
 
   const app = express();
-  app.use(cors());
+
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:3000",
+    })
+  );
+
+  // REDIS FOR SESSION
+  const RedisStore = connectRedis(session);
   app.use(
     session({
       store: new RedisStore({
-        client: redis,
+        client: redis as any,
       }),
       name: "qid",
       secret: "aslkdfjoiq12312",
@@ -33,20 +54,9 @@ import { redis } from "./redis";
     })
   );
 
-  const options = await getConnectionOptions(process.env.NODE_ENV || "development");
-  await createConnection({ ...options, name: "default", logging: false });
-
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [RegisterResolver, LoginResolver],
-      validate: true,
-    }),
-    context: ({ req, res }) => ({ req, res }),
-  });
+  // SERVER
   apolloServer.applyMiddleware({ app });
-
   app.get("/playground", ground.default({ endpoint: "/graphql" }));
-
   const port = process.env.PORT || 8000;
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}/playground`);

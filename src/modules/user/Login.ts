@@ -2,14 +2,14 @@ import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
 import { LoginInput } from "../../validation/LoginValidation";
-import { LoginContext } from "../../types/LoginContextType";
+import { ExpressContext } from "../../types/ExpressContextType";
 
 @Resolver()
 export class LoginResolver {
   @Mutation(() => User, { nullable: true })
   async loginUser(
     @Arg("user") { email, password }: LoginInput,
-    @Ctx() { req }: LoginContext
+    @Ctx() { req }: ExpressContext
   ): Promise<User | null> {
     const user = await User.findOne({ where: { email } });
     if (!user) return null;

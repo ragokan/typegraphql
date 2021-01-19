@@ -13,39 +13,34 @@ afterAll(async () => {
   await conn.close();
 });
 
-describe("Register", () => {
-  it("create user", async () => {
-    const user = {
+describe("Get User", () => {
+  it("get user", async () => {
+    const user = await User.create({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-    };
+      confirmed: true,
+    }).save();
 
-    const registerMutation = `
-      mutation Register {
-        registerUser(
-          data: {
-            email: "${user.email}"
-            firstName: "${user.firstName}"
-            lastName: "${user.lastName}"
-            password: "${user.password}"
-          }
-        ) {
+    const getUserQuery = `
+    query GetUser{
+        getUser {
           id
           email
-          firstName
-          lastName
           name
+            firstName
+          lastName
         }
       }
 `;
 
-    const response = await callGraphql({ source: registerMutation });
+    const response = await callGraphql({ source: getUserQuery, userId: user.id });
 
     expect(response).toMatchObject({
       data: {
-        registerUser: {
+        getUser: {
+          id: String(user.id),
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
@@ -53,10 +48,5 @@ describe("Register", () => {
         },
       },
     });
-
-    const dbUser = await User.findOne({ where: { email: user.email } });
-
-    expect(dbUser).toBeDefined();
-    expect(dbUser?.confirmed).toBeFalsy();
   });
 });

@@ -5,17 +5,27 @@ import { createSchema } from "../modules/utils/CreateSchema";
 interface Options {
   source: string;
   variableValues?: Maybe<{ [key: string]: any }>;
+  userId?: string | number;
 }
 
 let schema: GraphQLSchema;
 import dotenv from "dotenv";
 
-export const callGraphql = async ({ source, variableValues }: Options) => {
+export const callGraphql = async ({ source, userId }: Options) => {
   dotenv.config();
   if (!schema) schema = await createSchema();
   return graphql({
     schema,
     source,
-    variableValues,
+    contextValue: {
+      req: {
+        session: {
+          userId,
+        },
+      },
+      res: {
+        clearCookie: () => jest.fn(),
+      },
+    },
   });
 };

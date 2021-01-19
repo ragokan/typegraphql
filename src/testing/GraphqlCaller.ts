@@ -8,8 +8,10 @@ interface Options {
 }
 
 let schema: GraphQLSchema;
+import dotenv from "dotenv";
 
 export const callGraphql = async ({ source, variableValues }: Options) => {
+  dotenv.config();
   if (!schema) schema = await createSchema();
   return graphql({
     schema,

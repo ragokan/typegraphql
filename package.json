@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "test:db-setup": "ts-node src/testing/TestSetup.ts",
-    "test": "npm run test:db-setup && jest -i"
+    "test": "npm run test:db-setup && jest -i --detectOpenHandles"
   },
   "main": "index.js",
   "author": "ragokan",

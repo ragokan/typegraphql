@@ -2,6 +2,7 @@ import { Connection } from "typeorm";
 import { callGraphql } from "../GraphqlCaller";
 import { testConnection } from "../TestConnection";
 import faker from "faker";
+import { User } from "../../entity/User";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -44,12 +45,18 @@ describe("Register", () => {
 
     expect(response).toMatchObject({
       data: {
-        register: {
+        registerUser: {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
+          name: `${user.firstName} ${user.lastName}`,
         },
       },
     });
+
+    const dbUser = await User.findOne({ where: { email: user.email } });
+
+    expect(dbUser).toBeDefined();
+    expect(dbUser?.confirmed).toBeFalsy();
   });
 });

@@ -1,4 +1,6 @@
 import { createConnection } from "typeorm";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const testConnection = (drop: boolean = false) =>
   createConnection({

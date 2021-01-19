@@ -23,6 +23,6 @@ export async function SendEmail(
       html: `<a href="${mailUrl}">${message}</a>`,
     });
   } catch (error) {
-    throw new Error(error);
+    console.log(error);
   }
 }

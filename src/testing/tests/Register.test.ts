@@ -1,6 +1,7 @@
 import { Connection } from "typeorm";
 import { callGraphql } from "../GraphqlCaller";
 import { testConnection } from "../TestConnection";
+import faker from "faker";
 
 let conn: Connection;
 beforeAll(async () => {
@@ -23,19 +24,30 @@ mutation Register($data:RegisterInput!) {
       name
     }
   }
-  
 `;
 
 describe("Register", () => {
   it("create user", async () => {
-    await callGraphql({
+    const user = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    const response = await callGraphql({
       source: registerMutation,
       variableValues: {
-        data: {
-          firstName: "Okan",
-          lastName: "Yeah",
-          email: "letstestthis@gmail.com",
-          password: "realhammer99",
+        data: user,
+      },
+    });
+
+    expect(response).toMatchObject({
+      data: {
+        register: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
         },
       },
     });

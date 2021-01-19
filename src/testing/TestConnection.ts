@@ -2,7 +2,6 @@ import { createConnection } from "typeorm";
 
 export const testConnection = (drop: boolean = false) =>
   createConnection({
-    name: "development",
     type: "postgres",
     host: "localhost",
     port: 5432,
@@ -11,5 +10,5 @@ export const testConnection = (drop: boolean = false) =>
     database: "ormlord-testing",
     synchronize: drop,
     dropSchema: drop,
-    entities: [__dirname + "../entity/**/*.ts"],
+    entities: [__dirname + "/../entity/*.*"],
   });

@@ -9,6 +9,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { createSchema } from "./modules/utils/CreateSchema";
+import { User } from "./entity/User";
 
 (async () => {
   dotenv.config();

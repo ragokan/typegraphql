@@ -22,6 +22,7 @@
     "express-session": "^1.17.1",
     "graphql": "^15.4.0",
     "graphql-playground-middleware-express": "^1.7.22",
+    "graphql-query-complexity": "^0.7.2",
     "ioredis": "^4.19.4",
     "jest": "^26.6.3",
     "nodemailer": "^6.4.17",

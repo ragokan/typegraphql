@@ -9,7 +9,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { createSchema } from "./modules/utils/CreateSchema";
-import { User } from "./entity/User";
+import queryComplexity, {
+  simpleEstimator,
+  fieldExtensionsEstimator,
+} from "graphql-query-complexity";
 
 (async () => {
   dotenv.config();
@@ -21,7 +24,19 @@ import { User } from "./entity/User";
   const schema = await createSchema();
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }: any) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res }),
+    validationRules: [
+      queryComplexity({
+        maximumComplexity: 20,
+        variables: {},
+        estimators: [
+          fieldExtensionsEstimator(),
+          simpleEstimator({
+            defaultComplexity: 1,
+          }),
+        ],
+      }),
+    ],
   });
 
   const app = express();

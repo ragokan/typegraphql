@@ -1,9 +1,9 @@
 import { Resolver, Mutation, Arg, ClassType, UseMiddleware } from "type-graphql";
 import { Middleware } from "type-graphql/dist/interfaces/Middleware";
-import { Product } from "../../entity/Product";
 import { User } from "../../entity/User";
-import { ProductInput } from "../../validation/ProductValidation";
 import { RegisterInput } from "../../validation/RegisterValidation";
+import { Product } from "../../entity/Product";
+import { ProductInput } from "../../validation/ProductValidation";
 
 function createBaseResolver<T extends ClassType, X extends ClassType>(
   suffix: string,
@@ -17,7 +17,7 @@ function createBaseResolver<T extends ClassType, X extends ClassType>(
     @Mutation(() => returnType, { name: suffix })
     @UseMiddleware(...(middleware || []))
     async create(@Arg("data", () => inputType) data: typeof inputType) {
-      return await entity.create(data).save();
+      return await entity.create().save();
     }
   }
 
@@ -31,9 +31,9 @@ export const CreateUserResolver = createBaseResolver(
   User
 );
 
-export const CreateProductResolver = createBaseResolver(
-  "createProduct",
-  Product,
-  ProductInput,
-  Product
-);
+// export const CreateProductResolver = createBaseResolver(
+//   "createProduct",
+//   Product,
+//   ProductInput,
+//   Product
+// );

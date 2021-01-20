@@ -1,4 +1,3 @@
-import { type } from "os";
 import { Field, ID, ObjectType, Root } from "type-graphql";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 import { Product } from "./Product";

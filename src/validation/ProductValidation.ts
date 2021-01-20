@@ -8,5 +8,5 @@ export class ProductInput {
   name: string;
 
   @Field()
-  owner: string;
+  owner: number;
 }

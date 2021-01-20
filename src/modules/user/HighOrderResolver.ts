@@ -2,8 +2,6 @@ import { Resolver, Mutation, Arg, ClassType, UseMiddleware } from "type-graphql"
 import { Middleware } from "type-graphql/dist/interfaces/Middleware";
 import { User } from "../../entity/User";
 import { RegisterInput } from "../../validation/RegisterValidation";
-import { Product } from "../../entity/Product";
-import { ProductInput } from "../../validation/ProductValidation";
 
 function createBaseResolver<T extends ClassType, X extends ClassType>(
   suffix: string,
@@ -31,6 +29,8 @@ export const CreateUserResolver = createBaseResolver(
   User
 );
 
+// import { Product } from "../../entity/Product";
+// import { ProductInput } from "../../validation/ProductValidation";
 // export const CreateProductResolver = createBaseResolver(
 //   "createProduct",
 //   Product,

@@ -8,8 +8,8 @@ export class CreateProductResolver {
   async createProduct(
     @Arg("data") { name, owner }: ProductInput
   ): Promise<Product | null> {
-    const productId = await Product.create({ name, owner: { id: owner } }).save();
-    const product = await Product.findOne(productId.id, { relations: ["owner"] });
+    const { id } = await Product.create({ name, owner: { id: owner } }).save();
+    const product = await Product.findOne(id, { relations: ["owner"] });
 
     return product || null;
   }

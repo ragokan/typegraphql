@@ -9,10 +9,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { createSchema } from "./modules/utils/CreateSchema";
-import queryComplexity, {
-  simpleEstimator,
-  fieldExtensionsEstimator,
-} from "graphql-query-complexity";
+import queryComplexity, { simpleEstimator, fieldExtensionsEstimator } from "graphql-query-complexity";
 
 (async () => {
   dotenv.config();
@@ -25,28 +22,11 @@ import queryComplexity, {
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({ req, res }),
-    validationRules: [
-      queryComplexity({
-        maximumComplexity: 20,
-        variables: {},
-        estimators: [
-          fieldExtensionsEstimator(),
-          simpleEstimator({
-            defaultComplexity: 1,
-          }),
-        ],
-      }),
-    ],
   });
 
   const app = express();
 
-  app.use(
-    cors({
-      credentials: true,
-      origin: "http://localhost:3000",
-    })
-  );
+  app.use(cors());
 
   // REDIS FOR SESSION
   const RedisStore = connectRedis(session);
@@ -68,7 +48,7 @@ import queryComplexity, {
   );
 
   // SERVER
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
   app.get("/playground", ground.default({ endpoint: "/graphql" }));
   const port = process.env.PORT || 8000;
   app.listen(port, () => {

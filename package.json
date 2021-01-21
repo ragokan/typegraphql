@@ -8,7 +8,7 @@
     "test": "npm run test:db-setup && jest -i --detectOpenHandles",
     "build": "tsc",
     "start": "node dist/index.js",
-    "heroku-postbuild": "yarn build"
+    "heroku-postbuild": "npm run build"
   },
   "main": "index.js",
   "author": "ragokan",

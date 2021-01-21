@@ -15,19 +15,14 @@ function createBaseResolver<T extends ClassType, X extends ClassType>(
     @Mutation(() => returnType, { name: suffix })
     @UseMiddleware(...(middleware || []))
     async create(@Arg("data", () => inputType) data: typeof inputType) {
-      return await entity.create().save();
+      return await entity.create(data).save();
     }
   }
 
   return BaseResolver;
 }
 
-export const CreateUserResolver = createBaseResolver(
-  "createUser",
-  User,
-  RegisterInput,
-  User
-);
+export const CreateUserResolver = createBaseResolver("createUser", User, RegisterInput, User);
 
 // import { Product } from "../../entity/Product";
 // import { ProductInput } from "../../validation/ProductValidation";

@@ -9,7 +9,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { createSchema } from "./modules/utils/CreateSchema";
-import queryComplexity, { simpleEstimator, fieldExtensionsEstimator } from "graphql-query-complexity";
 
 (async () => {
   dotenv.config();

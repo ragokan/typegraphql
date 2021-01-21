@@ -1,5 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { ProductInput } from "../../validation/ProductValidation";
+import { Arg, Query, Resolver } from "type-graphql";
 import { Product } from "../../entity/Product";
 
 @Resolver()

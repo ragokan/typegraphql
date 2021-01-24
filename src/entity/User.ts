@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, Root } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
@@ -30,4 +30,14 @@ export class User extends BaseEntity {
 
   @Column("bool", { default: false })
   confirmed: boolean;
+
+  // Utils
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

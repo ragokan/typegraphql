@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import dotenv from "dotenv";
+dotenv.config();
 import { createConnection, getConnectionOptions } from "typeorm";
 import * as ground from "graphql-playground-middleware-express";
 import { ApolloServer } from "apollo-server-express";
@@ -6,12 +8,10 @@ import connectRedis from "connect-redis";
 import session from "express-session";
 import { redis } from "./redis";
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import { createSchema } from "./modules/utils/CreateSchema";
 
 (async () => {
-  dotenv.config();
   // DATABASE
   const options = await getConnectionOptions(process.env.NODE_ENV || "development");
   await createConnection({ ...options, name: "default", logging: false });
@@ -25,23 +25,26 @@ import { createSchema } from "./modules/utils/CreateSchema";
 
   const app = express();
 
-  app.use(cors());
+  app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
   // REDIS FOR SESSION
   const RedisStore = connectRedis(session);
   app.use(
     session({
-      store: new RedisStore({
-        client: redis,
-      }),
-      name: "sessionSecret",
+      store: process.env.testMode
+        ? undefined
+        : new RedisStore({
+            client: redis,
+          }),
+      name: "qid",
       secret: process.env.sessionSecret as string,
-      resave: false,
+      resave: true,
       saveUninitialized: false,
+      rolling: true,
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 365, // 7 years
+        maxAge: 1000 * 60 * 60 * 2, // 2 Hours
       },
     })
   );

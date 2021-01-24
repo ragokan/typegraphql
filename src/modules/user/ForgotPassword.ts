@@ -3,7 +3,7 @@ import { User } from "../../entity/User";
 import { SendEmail } from "../utils/SendEmail";
 import { CreatePasswordResetUrl } from "../utils/CreateMailUrl";
 import { PasswordInput } from "../../validation/PasswordValidation";
-import { forgotPasswordPrefix } from "../constants/RedisPrefixes";
+import { forgotPasswordConstant } from "../constants/RedisPrefixes";
 import { redis } from "../../redis";
 import bcrypt from "bcryptjs";
 import { ExpressContext } from "../../types/ExpressContextType";
@@ -29,7 +29,7 @@ export class ForgotPasswordResolver {
     @Ctx() { req }: ExpressContext
   ): Promise<User | null> {
     try {
-      const userId = await redis.get(forgotPasswordPrefix + token);
+      const userId = await redis.get(forgotPasswordConstant + token);
       if (!userId) return null;
 
       const user = await User.findOne(userId);
@@ -40,7 +40,7 @@ export class ForgotPasswordResolver {
 
       await user.save();
 
-      redis.del(forgotPasswordPrefix + token);
+      redis.del(forgotPasswordConstant + token);
       req.session.userId = userId;
       return user;
     } catch {

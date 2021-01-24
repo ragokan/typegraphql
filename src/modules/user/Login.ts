@@ -7,10 +7,7 @@ import { ExpressContext } from "../../types/ExpressContextType";
 @Resolver()
 export class LoginResolver {
   @Mutation(() => User, { nullable: true })
-  async loginUser(
-    @Arg("data") { email, password }: LoginInput,
-    @Ctx() { req }: ExpressContext
-  ): Promise<User | null> {
+  async loginUser(@Arg("data") { email, password }: LoginInput, @Ctx() { req }: ExpressContext): Promise<User | null> {
     const user = await User.findOne({ where: { email } });
     if (!user) return null;
 

@@ -8,9 +8,7 @@ import { CreateConfirmationUrl } from "../utils/CreateMailUrl";
 @Resolver()
 export class RegisterResolver {
   @Mutation(() => User)
-  async registerUser(
-    @Arg("data") { email, firstName, lastName, password }: RegisterInput
-  ): Promise<User> {
+  async registerUser(@Arg("data") { email, firstName, lastName, password }: RegisterInput): Promise<User> {
     try {
       const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -21,7 +19,7 @@ export class RegisterResolver {
         password: hashedPassword,
       }).save();
 
-      await SendEmail(email, await CreateConfirmationUrl(user.id));
+      if (!process.env.testMode) await SendEmail(email, await CreateConfirmationUrl(user.id));
 
       return user;
     } catch (error) {

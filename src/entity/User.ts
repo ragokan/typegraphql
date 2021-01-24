@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType, Root } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
-import { Product } from "./Product";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @ObjectType()
 @Entity()
@@ -31,11 +30,4 @@ export class User extends BaseEntity {
 
   @Column("bool", { default: false })
   confirmed: boolean;
-
-  @Field(() => [Product], { nullable: true })
-  @OneToMany(() => Product, (product: Product) => product.owner, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  products: Product[];
 }

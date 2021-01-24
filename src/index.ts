@@ -20,7 +20,7 @@ import { createSchema } from "./modules/utils/CreateSchema";
   const schema = await createSchema();
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res, connection }) => ({ req, res, connection }),
   });
 
   const app = express();

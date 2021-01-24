@@ -10,6 +10,6 @@ export class GetUserResolver {
   @Query(() => User, { nullable: true })
   async getUser(@Ctx() { req }: ExpressContext) {
     if (!req.session.userId) return null;
-    return await User.findOne(req.session.userId, { relations: ["products"] });
+    return await User.findOne(req.session.userId);
   }
 }

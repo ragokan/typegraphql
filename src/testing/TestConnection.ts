@@ -2,8 +2,9 @@ import { createConnection } from "typeorm";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const testConnection = (drop: boolean = false) =>
-  createConnection({
+export const testConnection = (drop: boolean = false) => {
+  process.env.testMode = "true";
+  return createConnection({
     type: "postgres",
     host: "localhost",
     port: 5432,
@@ -14,3 +15,4 @@ export const testConnection = (drop: boolean = false) =>
     dropSchema: drop,
     entities: [__dirname + "/../entity/*.*"],
   });
+};

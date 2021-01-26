@@ -21,11 +21,19 @@ import { createSchema } from "./modules/utils/CreateSchema";
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res, connection }) => ({ req, res, connection }),
+    playground: {
+      settings: {
+        "request.credentials": "include",
+      },
+    },
   });
 
   const app = express();
+  app.use(
+    cors({ origin: ["localhost:3000", "localhost:5000", "localhost:8000", process.env.frontendUrl], credentials: true })
+  );
 
-  app.use(cors({ credentials: true, origin: process.env.frontendUrl }));
+  // app.use(cors({ credentials: true, origin: process.env.frontendUrl }));
 
   // REDIS FOR SESSION
   const RedisStore = connectRedis(session);
@@ -50,8 +58,8 @@ import { createSchema } from "./modules/utils/CreateSchema";
   );
 
   // SERVER
-  apolloServer.applyMiddleware({ app, cors: false });
-  app.get("/playground", ground.default({ endpoint: "/graphql" }));
+  apolloServer.applyMiddleware({ app });
+  app.get("/playground", ground.default({ endpoint: "/graphql", settings: { "schema.polling.enable": false } as any }));
   const port = process.env.PORT || 8000;
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}/playground`);

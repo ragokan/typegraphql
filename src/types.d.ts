@@ -9,6 +9,7 @@ declare global {
       mailerTitle: string;
       mailResetUrl: string;
       DATABASE_URL: string;
+      frontendUrl: string;
     }
   }
 }

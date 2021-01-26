@@ -58,7 +58,7 @@ import { createSchema } from "./modules/utils/CreateSchema";
   );
 
   // SERVER
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
   app.get("/playground", ground.default({ endpoint: "/graphql", settings: { "schema.polling.enable": false } as any }));
   const port = process.env.PORT || 8000;
   app.listen(port, () => {
